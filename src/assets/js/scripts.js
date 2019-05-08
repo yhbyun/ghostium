@@ -24,22 +24,24 @@
     // =================
     Drawer.init();
 
-    // PrismJS handler
+    // code prettify handler
     // =================
-    Prism.languages.html = Prism.languages.markup;
+    var _codePrettifyHandler = function() {
+      $('code[class*="language-"]').addClass(function() {
+        var _lang = $(this).attr('class');
 
-    var _prismHandler = function() {
-      $('code').not('[class*="language-"]').addClass(function() {
-        var _lang = $(this).attr('class')  || 'markup';
-
-        _lang = _lang.replace(/(language|lang)+\-/gi, '');
-        return 'language-' + (Prism.languages.hasOwnProperty(_lang) ? _lang : 'markup');
+        _lang = _lang.replace(/language+\-/gi, '');
+        return 'prettyprint lang-' + _lang;
       });
 
-      Prism.highlightAll();
+      $('pre > code').not('[class*="language-"]').addClass(function() {
+        return 'prettyprint';
+      });
+
+      PR.prettyPrint()
     };
 
-    _prismHandler();
+    _codePrettifyHandler();
 
     // DISQUS Handlers
     // =================
@@ -111,7 +113,7 @@
         _disqusHandler();
         _gaHandler();
         _disqusCounterHandler();
-        _prismHandler();
+        _codePrettifyHandler();
 
         $('[data-load-image]', $content).each(function() {
           ImageLoader.load($(this));
